@@ -25,23 +25,21 @@ Vagrant.configure("2") do |config|
 
   config.vm.synced_folder "~/Projects/", "/vagrant_projects"
 
+  config.vm.hostname = "development"
+
+
   config.vm.provider "virtualbox" do |vb|
   #   vb.gui = true
+    vb.linked_clone = true
     vb.customize ["guestproperty", "set", :id, "/VirtualBox/GuestAdd/VBoxService/--timesync-set-threshhold", 10000]
-  #   vb.memory = "1024"
+    vb.memory = "4096"
   end
-
-  config.vm.provision "shell", inline: <<-SHELL
-    apt-get update
-    apt-get install -y apache2
-  SHELL
 
   # Run Ansible from the Vagrant VM
-  config.vm.provision "ansible_local" do |ansible|
-    ansible.playbook = "provisioning/playbook.yml"
-    ansible.install_mode = "pip"
-    ansible.version = "latest"
-    ansible.verbose = true
-  end
+  # config.vm.provision "ansible" do |ansible|
 
+  #   ansible.verbose = "v"
+  #   ansible.playbook = "provisioning/playbook.yml"
+
+  # end
 end
